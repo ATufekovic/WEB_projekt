@@ -1,7 +1,3 @@
-<?php
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,7 +43,7 @@
                         </form>
                     </div>
                     <div class="card-footer">
-                        <p>Not a member? <a href="register.php" target="_blank">Register here!</a></p>
+                        <p>Not a member? <a href="register.php">Register here!</a></p>
                     </div>
                 </div>
             </div>
