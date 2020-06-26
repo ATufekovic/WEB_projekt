@@ -6,9 +6,8 @@ if(!$_SERVER["REQUEST_METHOD"] === "POST"){
     header("Location: index.php");
 }
 else {
-    //TODO: provjera za napade!
-    $username = $_POST["username"];
-    $password = $_POST["password"];
+    $username = test_input($_POST["username"]);
+    $password = test_input($_POST["password"]);
 
     $sql = "SELECT username FROM users WHERE username = '{$username}';";
     $result = $conn->query($sql);

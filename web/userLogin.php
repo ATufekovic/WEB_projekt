@@ -8,10 +8,9 @@ $successInfo = "";
 if (!$_SERVER["REQUEST_METHOD"] === "POST") {
     header("Location: index.php");
 } else {
-    //TODO: fali provjera unosa za napade!
-    $username = $_POST["username"];
-    $password = $_POST["password"];
-    if(isset($_POST["remember"])){
+    $username = test_input($_POST["username"]);
+    $password = test_input($_POST["password"]);
+    if (isset($_POST["remember"])) {
         $remember = $_POST["remember"];
     }
 
@@ -27,7 +26,7 @@ if (!$_SERVER["REQUEST_METHOD"] === "POST") {
         if (password_verify($password, $hashed)) {
             //login je u redu, nastavi sa radom
             $successInfo .= "Redirecting back to xyz... in 3 seconds";
-            header( "refresh:3; url=index.php" );
+            header("refresh:3; url=index.php");
             //TODO: logika nakon uspjesnog logiranja
 
         } else {
@@ -62,7 +61,7 @@ if (!$_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="col">
                 <div class="card">
                     <?php
-                    if($errorFlag){
+                    if ($errorFlag) {
                         echo '<div class="card-header">
                                 <h4>Try again</h4>
                             </div>';
@@ -108,7 +107,11 @@ if (!$_SERVER["REQUEST_METHOD"] === "POST") {
                         </p>
                     </div>
                 </div>
-                <a href="index.php" class="btn btn-outline-secondary mt-2">Go back</a>
+                <?php
+                if ($errorFlag) {
+                    echo '<a href="index.php" class="btn btn-outline-secondary mt-2">Go back</a>';
+                }
+                ?>
             </div>
             <div class="col"></div>
         </div>
