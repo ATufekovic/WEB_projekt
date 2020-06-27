@@ -1,4 +1,8 @@
 <?php
+session_start();
+if(isset($_SESSION["username"])){
+    header("Location: content.php");
+}
 require_once "connect.php";
 $errorInfo = "";
 $registerInfo = "";

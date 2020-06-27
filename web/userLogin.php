@@ -1,4 +1,8 @@
 <?php
+session_start();
+if(isset($_SESSION["username"])){
+    header("Location: content.php");
+}
 require_once "connect.php";
 
 $errorFlag = false;
@@ -10,9 +14,6 @@ if (!$_SERVER["REQUEST_METHOD"] === "POST") {
 } else {
     $username = test_input($_POST["username"]);
     $password = test_input($_POST["password"]);
-    if (isset($_POST["remember"])) {
-        $remember = $_POST["remember"];
-    }
 
     $sql = "SELECT * FROM users WHERE username = '{$username}'";
     $result = $conn->query($sql);
@@ -25,8 +26,10 @@ if (!$_SERVER["REQUEST_METHOD"] === "POST") {
         $hashed = $row["password"];
         if (password_verify($password, $hashed)) {
             //login je u redu, nastavi sa radom
-            $successInfo .= "Redirecting back to xyz... in 3 seconds";
-            header("refresh:3; url=index.php");
+            $successInfo .= "Redirecting back to content... in 3 seconds";
+            $_SESSION["username"] = $username;
+            $_SESSION["password"] = $password;
+            header("refresh:3; url=content.php");
             //TODO: logika nakon uspjesnog logiranja
 
         } else {
@@ -83,11 +86,6 @@ if (!$_SERVER["REQUEST_METHOD"] === "POST") {
                                     <div class="form-group">
                                         <label for="password">Password:</label>
                                         <input class="form-control" type="password" name="password" id="inputPassword">
-                                    </div>
-                                    <div class="form-group form-check">
-                                        <label class="form-check-label" for="remember">
-                                            <input class="form-check-input" type="checkbox" name="remember" id="remember"> Remember me
-                                        </label>
                                     </div>
                                     <button class="btn btn-primary" type="submit">Submit</button>
                                 </form>';

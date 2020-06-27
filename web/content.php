@@ -1,7 +1,7 @@
 <?php
 session_start();
-if(isset($_SESSION["username"])){
-    header("Location: content.php");
+if (!isset($_SESSION["username"])) {
+    header("Location: index.php");
 }
 ?>
 
@@ -11,7 +11,7 @@ if(isset($_SESSION["username"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Content</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -20,7 +20,7 @@ if(isset($_SESSION["username"])){
 
 <body>
     <div class="jumbotron text-center">
-        <h2>Register</h2>
+        <h2>Title</h2>
     </div>
     <div class="container">
         <div class="row">
@@ -28,26 +28,15 @@ if(isset($_SESSION["username"])){
             <div class="col">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Register</h4>
+                        <h4>Hello</h4>
                     </div>
                     <div class="card-body">
-                        <form action="userRegister.php" method="post">
-                            <div class="form-group">
-                                <label for="username">Username:</label>
-                                <input class="form-control" type="text" name="username" id="inputUsername">
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password:</label>
-                                <input class="form-control" type="password" name="password" id="inputPassword">
-                            </div>
-                            <button class="btn btn-primary" type="submit">Submit</button>
-                        </form>
+                        <p>Some irrelevant info, TODO: change this</p>
                     </div>
                     <div class="card-footer">
-                        <p>Username has to be less than 20 characters long.</p>
+                        <a href="logout.php" class="btn btn-secondary">Log out</a>
                     </div>
                 </div>
-                <a href="index.php" class="btn btn-outline-secondary mt-2">Go back</a>
             </div>
             <div class="col"></div>
         </div>

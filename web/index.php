@@ -1,3 +1,11 @@
+<?php
+session_start();
+if(isset($_SESSION["username"])){
+    //TODO: ako promijenim ime glavnog sadrzaja sjetiti se
+    header("Location: content.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,11 +41,6 @@
                             <div class="form-group">
                                 <label for="password">Password:</label>
                                 <input class="form-control" type="password" name="password" id="inputPassword">
-                            </div>
-                            <div class="form-group form-check">
-                                <label class="form-check-label" for="remember">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember"> Remember me
-                                </label>
                             </div>
                             <button class="btn btn-primary" type="submit">Submit</button>
                         </form>
