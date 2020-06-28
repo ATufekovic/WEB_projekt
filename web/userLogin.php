@@ -24,11 +24,13 @@ if (!$_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         $row = $result->fetch_assoc();
         $hashed = $row["password"];
+        $userID = $row["id"];
         if (password_verify($password, $hashed)) {
             //login je u redu, nastavi sa radom
             $successInfo .= "Redirecting back to content... in 3 seconds";
             $_SESSION["username"] = $username;
             $_SESSION["password"] = $password;
+            $_SESSION["userID"] = $userID;
             header("refresh:3; url=content.php");
             //TODO: logika nakon uspjesnog logiranja
 
@@ -77,7 +79,7 @@ if (!$_SERVER["REQUEST_METHOD"] === "POST") {
                     <div class="card-body">
                         <?php
                         if ($errorFlag) {
-                            $action = htmlentities($_SERVER['PHP_SELF']);
+                            $action = htmlspecialchars($_SERVER['PHP_SELF']);
                             $temp = '<form action="' . $action . '" method="post">
                                     <div class="form-group">
                                         <label for="username">Username:</label>

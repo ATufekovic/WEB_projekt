@@ -1,7 +1,7 @@
 <?php
 session_start();
 if(isset($_SESSION["username"])){
-    //TODO: ako promijenim ime glavnog sadrzaja sjetiti se
+    //TODO: promijeniti handle-anje glavne stranice
     header("Location: content.php");
 }
 ?>

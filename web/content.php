@@ -3,7 +3,6 @@ session_start();
 if (!isset($_SESSION["username"])) {
     header("Location: index.php");
 }
-aaaaaaaaaaaaaaaaa
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +20,7 @@ aaaaaaaaaaaaaaaaa
 
 <body>
     <div class="jumbotron text-center">
-        <h2>Title</h2>
+        <h2>Tasks</h2>
     </div>
     <div class="container-fluid">
         <div class="row">
@@ -37,18 +36,32 @@ aaaaaaaaaaaaaaaaa
                         <p>If a task is public others can see it but they can't edit it.</p>
                     </div>
                     <div class="card-footer">
-                        <p><a href="newTask.php" class="btn btn-outline-dark">Click here</a> to create a new task</p>
+                        <p><a href="newTask.php" class="btn btn-outline-dark">Click here to create a new task</a></p>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6"></div>
+            <div class="col-sm-6">
+                <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Task title</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Task text</p>
+                        </div>
+                        <div class="card-footer">
+                            <a class="btn btn-secondary" href="editTask.php?id=5">Edit test task</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-sm-3">
                 <div class="card">
                     <div class="card-header">
                         <h4>Logged in as <?php echo $_SESSION["username"]; ?></h4>
                     </div>
                     <div class="card-body">
-                        <p>Some irrelevant info, TODO: change this</p>
+                        <p>Some irrelevant info, TODO: change this to num of tasks.</p>
                     </div>
                     <div class="card-footer">
                         <a href="logout.php" class="btn btn-secondary">Log out</a>
