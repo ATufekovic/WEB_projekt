@@ -15,9 +15,12 @@ if (!$_SERVER["REQUEST_METHOD"] === "POST") {
     $username = test_input($_POST["username"]);
     $password = test_input($_POST["password"]);
 
-    $sql = "SELECT * FROM users WHERE username = '{$username}'";
-    $result = $conn->query($sql);
-    if ($result->num_rows == 0) {
+    $sql = "SELECT * FROM users WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows === 0) {
         //ponovan unos podataka jer korisnik ne postoji
         $errorFlag = true;
         $errorInfo .= "User does not exist.";
@@ -40,6 +43,7 @@ if (!$_SERVER["REQUEST_METHOD"] === "POST") {
             $errorInfo .= "Password does not match";
         }
     }
+    $stmt->close();
 }
 ?>
 

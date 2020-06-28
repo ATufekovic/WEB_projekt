@@ -15,13 +15,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST["private"])) {
         $taskPrivate = 1;
     }
-    $sql = "INSERT INTO tasks (title, text, creationDate, lastEditDate, ownerID, private) VALUES ('{$taskTitle}','{$taskText}','{$mysqltime}','{$mysqltime}','{$ownerID}','{$taskPrivate}')";
-    if(!$conn->query($sql)){
+
+    $sql = "INSERT INTO tasks (title, text, creationDate, lastEditDate, ownerID, private) VALUES (?,?,?,?,?,?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssii", $taskTitle, $taskText, $mysqltime, $mysqltime, $ownerID, $taskPrivate);
+    $stmt->execute();
+    if($stmt->affected_rows === 0){
         $errorInfo .= "Something went wrong, task wasn't saved";
-    }
-    else {
+        die();
+    } else {
         $successInfo .= "Task successfully saved";
     }
+    $stmt->close();
 }
 
 ?>

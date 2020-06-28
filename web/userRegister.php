@@ -13,21 +13,31 @@ else {
     $username = test_input($_POST["username"]);
     $password = test_input($_POST["password"]);
 
-    $sql = "SELECT username FROM users WHERE username = '{$username}';";
-    $result = $conn->query($sql);
-    if($result->num_rows != 0){
+    $sql = "SELECT username FROM users WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if($result->num_rows > 0){
         //postoji takav unos, prekini rad
         $errorInfo .= "Username taken, going back in 3 seconds";
         header( "refresh:3; url=register.php" );
     }
     else {
-        //ne postoji takav korisnik, nastavi s radom
+        //ime nije zauzeto, nastavi s radom
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO users (username, password) VALUES ('$username', '$hashedPassword');";
-        $result = $conn->query($sql);
+        $sql = "INSERT INTO users (username, password) VALUES (?, ?);";
+        $stmtReg = $conn->prepare($sql);
+        $stmtReg->bind_param("ss", $username, $hashedPassword);
+        $stmtReg->execute();
+        if($stmtReg->affected_rows === 0){
+            exit("Error in registering");
+        }
+        $stmtReg->close();
         $registerInfo .= "Operation successful, going back to index in 3 seconds";
         header( "refresh:3; url=index.php" );
     }
+    $stmt->close();
 }
 ?>
 

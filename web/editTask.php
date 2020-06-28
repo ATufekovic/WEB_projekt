@@ -14,9 +14,13 @@ if($_SERVER["REQUEST_METHOD"] === "GET"){
     } else {
         header("Location: index.php");
     }
-    $sql = "SELECT * FROM tasks WHERE id = {$taskID}";
-    $result = $conn->query($sql);
-    if(!$result){
+
+    $sql = "SELECT * FROM tasks WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $taskID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if($result->num_rows === 0){
         $errorInfo .= "Something went wrong";
         die();
     } else {
@@ -30,6 +34,7 @@ if($_SERVER["REQUEST_METHOD"] === "GET"){
     $private = $row["private"];
     $taskTitle = $row["title"];
     $taskText = $row["text"];
+    $stmt->close();
 }
 
 //ako je korisnik na ovoj stranici stisnuo button za POST onda obradi podatke na sljedeci nacin
@@ -42,14 +47,18 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
         $private = 1;
     }
     $mysqltime = date("Y-m-d H:i:s"); //MySQL DATETIME format
-    $sql = "UPDATE tasks SET title='{$taskTitle}', text='{$taskText}', lastEditDate='{$mysqltime}', private='{$private}' WHERE id='{$taskID}';";
-    $result = $conn->query($sql);
-    if(!$result){
+
+    $sql = "UPDATE tasks SET title=?, text=?, lastEditDate=?, private=? WHERE id=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssii", $taskTitle, $taskText, $mysqltime, $private, $taskID);
+    $stmt->execute();
+    if($stmt->affected_rows === 0){
         $errorInfo .= "Something went wrong";
         die();
     } else {
         $successInfo .= "Task successfully saved";
     }
+    $stmt->close();
 }
 
 ?>
