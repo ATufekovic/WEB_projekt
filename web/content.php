@@ -1,7 +1,58 @@
 <?php
+require_once "connect.php";
 session_start();
 if (!isset($_SESSION["username"])) {
     header("Location: index.php");
+}
+$numOfTasks = 0;
+$numOfPrivateTasks = 0;
+$noTasks = false;
+$sql = "SELECT * FROM tasks WHERE ownerID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $_SESSION["userID"]);
+$stmt->execute();
+$result = $stmt->get_result();
+if($result->num_rows === 0){
+    //po mogućnosti radi nešto ako nema taskova, stvori neki placeholder
+    $noTasks = true;
+} else {
+    while($row = $result->fetch_assoc()){
+        $numOfTasks++;
+        $taskIDs[] = $row["id"];
+        $taskTitles[] = $row["title"];
+        $taskTexts[] = $row["text"];
+        $taskCreationDates[] = $row["creationDate"];
+        $taskLastEditDates[] = $row["lastEditDate"];
+        $taskPrivate[] = $row["private"];
+        if($row["private"]){
+            $numOfPrivateTasks++;
+        }
+    }
+}
+function echoTask($taskID, $taskTitle, $taskText, $taskCreationDate, $taskLastEditDate, $taskPrivacy){
+    $temp = "<div class='card mt-2'>
+        <div class='card-header'>
+            <h5>{$taskTitle}</h5>
+        </div>
+        <div class='card-body'>
+            <p>{$taskText}</p>
+        </div>
+        <div class='card-footer'>
+            <div class='container-fluid'>
+                <div class='row'>
+                    <div class ='col-sm-6'>
+                        <a class='btn btn-secondary mr-1' href='editTask.php?id={$taskID}'>Edit task</a>
+                        <a class='btn btn-danger' href='deleteTask.php?id={$taskID}'>Delete task</a>
+                    </div>
+                    <div class ='col-sm-6 mt-1'>
+                        <p>Created: {$taskCreationDate}<p>
+                        <p>Last edited: {$taskLastEditDate}<p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>";
+    echo $temp;
 }
 ?>
 
@@ -24,7 +75,7 @@ if (!isset($_SESSION["username"])) {
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-xl-3">
                 <div class="card">
                     <div class="card-header">
                         <h4>General task view</h4>
@@ -40,22 +91,24 @@ if (!isset($_SESSION["username"])) {
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-xl-6">
                 <div class="container-fluid">
                     <div class="card">
                         <div class="card-header">
-                            <h5>Task title</h5>
+                            <h5>Task list</h5>
                         </div>
                         <div class="card-body">
-                            <p>Task text</p>
-                        </div>
-                        <div class="card-footer">
-                            <a class="btn btn-secondary" href="editTask.php?id=5">Edit test task</a>
+                            <p>You can find all of your tasks below</p>
                         </div>
                     </div>
+                    <?php
+                    for ($i=0; $i < $numOfTasks ; $i++) { 
+                        echoTask($taskIDs[$i], $taskTitles[$i], $taskTexts[$i], $taskCreationDates[$i], $taskLastEditDates[$i], $taskPrivate[$i]);
+                    }
+                    ?>
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-xl-3">
                 <div class="card">
                     <div class="card-header">
                         <h4>Logged in as <?php echo $_SESSION["username"]; ?></h4>

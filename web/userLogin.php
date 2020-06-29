@@ -93,7 +93,7 @@ if (!$_SERVER["REQUEST_METHOD"] === "POST") {
                                         <label for="password">Password:</label>
                                         <input class="form-control" type="password" name="password" id="inputPassword">
                                     </div>
-                                    <button class="btn btn-primary" type="submit">Submit</button>
+                                    <button class="btn btn-primary" type="submit">Log in</button>
                                 </form>';
                             echo $temp;
                         } else {
