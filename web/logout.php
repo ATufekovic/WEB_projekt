@@ -25,7 +25,7 @@ else {
 </head>
 <body>
     <div class="jumbotron text-center">
-        <h2>Title</h2>
+        <h2>Log out</h2>
     </div>
     <div class="container">
         <div class="row">

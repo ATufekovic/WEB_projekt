@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
 <body>
     <div class="jumbotron text-center">
-        <h2>Tasks</h2>
+        <h2>View task</h2>
     </div>
     <div class="container">
         <div class="row">

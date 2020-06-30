@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <body>
     <div class="jumbotron text-center">
-        <h2>Tasks</h2>
+        <h2>New task</h2>
     </div>
     <div class="container">
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">

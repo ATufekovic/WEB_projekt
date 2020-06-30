@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <body>
     <div class="jumbotron text-center">
-        <h2>Tasks</h2>
+        <h2>Edit task</h2>
     </div>
     <div class="container">
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
@@ -151,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         let textInput = document.querySelector("#taskText");
         let warningText = document.querySelector("#warningText");
         let buttonSubmit = document.querySelector("#buttonSubmit");
-        buttonSubmit.disabled = true;
+        buttonSubmit.disabled = false;
         let titleBool = false;
         let textBool = true;
 

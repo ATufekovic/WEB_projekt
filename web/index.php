@@ -31,7 +31,7 @@ if($result->num_rows === 0){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task managment</title>
+    <title>Task managment index</title>
     <link rel="icon" href="icon.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -41,7 +41,7 @@ if($result->num_rows === 0){
 
 <body>
     <div class="jumbotron text-center">
-        <h2>Title</h2>
+        <h2>Task managment index</h2>
     </div>
     <div class="container">
         <div class="row">
@@ -94,7 +94,8 @@ if($result->num_rows === 0){
                                 </form>
                                 </div>
                                 <div class='card-footer'>
-                                    <p>Not a member? <a href='register.php'>Register here!</a></p></div>";
+                                    <p>Not a member? <a href='register.php'>Register here!</a></p>
+                                    <a class='btn btn-dark' href='https://github.com/ATufekovic/WEB_projekt' target='_blank'>Made by Anto Tufeković</a></div>";
                             echo $temp;
                         }
                         ?>
