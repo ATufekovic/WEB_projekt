@@ -30,7 +30,7 @@ if (!$_SERVER["REQUEST_METHOD"] === "POST") {
         $userID = $row["id"];
         if (password_verify($password, $hashed)) {
             //login je u redu, nastavi sa radom
-            $successInfo .= "Redirecting back to content... in 3 seconds";
+            $successInfo .= "Redirecting back to content in 3 seconds";
             $_SESSION["username"] = $username;
             $_SESSION["password"] = $password;
             $_SESSION["userID"] = $userID;

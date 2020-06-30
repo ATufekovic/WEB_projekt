@@ -12,24 +12,26 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $_SESSION["userID"]);
 $stmt->execute();
 $result = $stmt->get_result();
-if($result->num_rows === 0){
-    //po mogućnosti radi nešto ako nema taskova, stvori neki placeholder
+if ($result->num_rows === 0) {
+    //ako nema taskova stvori tekst koji hinta na kreiranje novog taska
     $noTasks = true;
 } else {
-    while($row = $result->fetch_assoc()){
+    while ($row = $result->fetch_assoc()) {
         $numOfTasks++;
         $taskIDs[] = $row["id"];
-        $taskTitles[] = $row["title"];
-        $taskTexts[] = $row["text"];
+        $taskTitles[] = test_input($row["title"]);
+        $taskTexts[] = test_input($row["text"]);
         $taskCreationDates[] = $row["creationDate"];
         $taskLastEditDates[] = $row["lastEditDate"];
         $taskPrivate[] = $row["private"];
-        if($row["private"]){
+        if ($row["private"]) {
             $numOfPrivateTasks++;
         }
     }
 }
-function echoTask($taskID, $taskTitle, $taskText, $taskCreationDate, $taskLastEditDate, $taskPrivacy){
+function echoTask($taskID, $taskTitle, $taskText, $taskCreationDate, $taskLastEditDate, $taskPrivacy)
+{
+    $taskText = nl2br($taskText);
     $temp = "<div class='card mt-2'>
         <div class='card-header'>
             <h5>{$taskTitle}</h5>
@@ -92,21 +94,24 @@ function echoTask($taskID, $taskTitle, $taskText, $taskCreationDate, $taskLastEd
                 </div>
             </div>
             <div class="col-xl-6">
-                <div class="container-fluid">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>Task list</h5>
-                        </div>
-                        <div class="card-body">
-                            <p>You can find all of your tasks below</p>
-                        </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Task list</h5>
                     </div>
-                    <?php
-                    for ($i=0; $i < $numOfTasks ; $i++) { 
-                        echoTask($taskIDs[$i], $taskTitles[$i], $taskTexts[$i], $taskCreationDates[$i], $taskLastEditDates[$i], $taskPrivate[$i]);
-                    }
-                    ?>
+                    <div class="card-body">
+                        <p>You can find all of your tasks below</p>
+                        <?php
+                        if($noTasks){
+                            echo "<p>It appears you have no tasks, how about making one? Click the button to create a new task!</p>";
+                        }
+                        ?>
+                    </div>
                 </div>
+                <?php
+                for ($i = 0; $i < $numOfTasks; $i++) {
+                    echoTask($taskIDs[$i], $taskTitles[$i], $taskTexts[$i], $taskCreationDates[$i], $taskLastEditDates[$i], $taskPrivate[$i]);
+                }
+                ?>
             </div>
             <div class="col-xl-3">
                 <div class="card">
@@ -114,7 +119,7 @@ function echoTask($taskID, $taskTitle, $taskText, $taskCreationDate, $taskLastEd
                         <h4>Logged in as <?php echo $_SESSION["username"]; ?></h4>
                     </div>
                     <div class="card-body">
-                        <p>Some irrelevant info, TODO: change this to num of tasks.</p>
+                        <p>You currently have <?php echo $numOfTasks?> tasks, of which <?php echo $numOfPrivateTasks?> are private.</p>
                     </div>
                     <div class="card-footer">
                         <a href="logout.php" class="btn btn-secondary">Log out</a>

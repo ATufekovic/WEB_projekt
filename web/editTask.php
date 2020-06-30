@@ -23,8 +23,6 @@ if($_SERVER["REQUEST_METHOD"] === "GET"){
     if($result->num_rows === 0){
         $errorInfo .= "Something went wrong";
         die();
-    } else {
-        $successInfo .= "Task successfully fetched";
     }
     $row = $result->fetch_assoc();
     //da nebi neregistrirana osoba probala napraviti smetnje
@@ -32,16 +30,16 @@ if($_SERVER["REQUEST_METHOD"] === "GET"){
         header("Location: index.php");//yeet
     }
     $private = $row["private"];
-    $taskTitle = $row["title"];
-    $taskText = $row["text"];
+    $taskTitle = test_input($row["title"]);
+    $taskText = test_input($row["text"]);
     $stmt->close();
 }
 
 //ako je korisnik na ovoj stranici stisnuo button za POST onda obradi podatke na sljedeci nacin
 if($_SERVER["REQUEST_METHOD"] === "POST"){
     $taskID = $_POST["taskID"];
-    $taskTitle = $_POST["taskTitle"];
-    $taskText = $_POST["taskText"];
+    $taskTitle = test_input($_POST["taskTitle"]);
+    $taskText = test_input($_POST["taskText"]);
     $private = 0;
     if (isset($_POST["private"])) {
         $private = 1;

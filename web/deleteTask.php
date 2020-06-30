@@ -7,12 +7,41 @@ $taskInfo = null;
 if (!isset($_SESSION["username"])) {
     header("Location: content.php");
 }
-//korisnik prvo dohvaća task na pregled prije brisanja za autentikaciju dali je korisnik zapravo vlasnik task-a, slično kao kod edit task
-if (!$_SERVER["REQUEST_METHOD"] === "GET") {
-    header("Location: index.php");
-} else {
-    $taskID = test_input($_GET["id"]);
 
+//korisnik je potvrdio brisanje, sada se POST koristi za mijenyaanje unosa baze, u oba slucaja ako nije GET ili POST korisnika baca na index.php
+if($_SERVER["REQUEST_METHOD"] === "POST"){
+    $taskID = test_input($_POST["taskID"]);
+    $sql = "SELECT * FROM tasks WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $taskID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows === 0) {
+        exit("No such task found");
+    } else {
+        $taskInfo = $result->fetch_assoc();
+        $stmt->close();
+        //ako korisnik nije vlasnik baci ga natrag na index
+        if ($_SESSION["userID"] != $taskInfo["ownerID"]) {
+            header("Location: index.php");
+        } else {
+            //u ovom bloku vlasnik je potvrdio brisanje svog taska, nastavi s time
+            $sql = "DELETE FROM tasks WHERE id = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $taskID);
+            $stmt->execute();
+            if($stmt->affected_rows === 0){
+                $stmt->close();
+                exit("Something went wrong");
+            } else {
+                $stmt->close();
+                $successInfo .= "Task deleted, going back to content";
+                header("refresh:1; url=content.php");
+            }
+        }
+    }
+} else if($_SERVER["REQUEST_METHOD"] === "GET"){
+    $taskID = test_input($_GET["id"]);
     $sql = "SELECT * FROM tasks WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $taskID);
@@ -24,17 +53,14 @@ if (!$_SERVER["REQUEST_METHOD"] === "GET") {
         $taskInfo = $result->fetch_assoc();
         $stmt->close();
         //ako je korisnik nije vlasnik baci ga natrag na index
-        if (!$_SESSION["userID"] == $taskInfo["id"]) {
+        if ($_SESSION["userID"] != $taskInfo["ownerID"]) {
             header("Location: index.php");
         }
     }
-}
-//korisnik je potvrdio brisanje, sada se POST koristi za mijenyaanje unosa baze, u oba slucaja ako nije GET ili POST korisnika baca na index.php
-if(!$_SERVER["REQUEST_METHOD"] === "POST"){
-    header("Location: index.php");
 } else {
-
+    header("Location: index.php");
 }
+
 
 ?>
 <!DOCTYPE html>
@@ -88,6 +114,8 @@ if(!$_SERVER["REQUEST_METHOD"] === "POST"){
                         <button type='submit' class='btn btn-danger' name='taskID' value='{$taskInfo["id"]}'>Yes i am sure</button>
                         <a href='content.php' class='btn btn-secondary'>No, go back</a>";
                         echo $temp;
+                    } else {
+                        echo "<div class='card'><p class='text-success'>{$successInfo}</p></div>";
                     }
                     ?>
                 </div>
