@@ -1,7 +1,7 @@
 <?php
 session_start();
-if(isset($_SESSION["username"])){
-    header("Location: content.php");
+if (isset($_SESSION["username"])) {
+    header("Location: index.php");
 }
 ?>
 
@@ -12,6 +12,7 @@ if(isset($_SESSION["username"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <link rel="icon" href="icon.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -40,11 +41,12 @@ if(isset($_SESSION["username"])){
                                 <label for="password">Password:</label>
                                 <input class="form-control" type="password" name="password" id="inputPassword">
                             </div>
-                            <button class="btn btn-primary" type="submit">Submit</button>
+                            <button class="btn btn-primary" type="submit" id="buttonSubmit">Submit</button>
                         </form>
                     </div>
                     <div class="card-footer">
-                        <p>Username has to be less than 20 characters long.</p>
+                        <p>Username has to be more than 8 and less than 20 characters long and may only contain letters, numbers and underscores.</p>
+                        <p class="text-warning" id="warningText"></p>
                     </div>
                 </div>
                 <a href="index.php" class="btn btn-outline-secondary mt-2">Go back</a>
@@ -53,5 +55,30 @@ if(isset($_SESSION["username"])){
         </div>
     </div>
 </body>
+<script>
+    $(document).ready(function() {
+        let nicknameInput = document.querySelector("#inputUsername");
+        let warningText = document.querySelector("#warningText");
+        let buttonSubmit = document.querySelector("#buttonSubmit");
+        buttonSubmit.disabled = true;
+
+        nicknameInput.addEventListener("keyup", (e) => {
+            var illegalChars = /\W/;
+            if (nicknameInput.value == "") {
+                warningText.innerHTML = "Not a valid username";
+                buttonSubmit.disabled = true;
+            } else if ((nicknameInput.value.length < 8) || (nicknameInput.value.length >= 20)) {
+                warningText.innerHTML = "Breaking character limit";
+                buttonSubmit.disabled = true;
+            } else if (illegalChars.test(nicknameInput.value)) {
+                warningText.innerHTML = "Contains forbidden letters";
+                buttonSubmit.disabled = true;
+            } else {
+                warningText.innerHTML = "";
+                buttonSubmit.disabled = false;
+            }
+        });
+    });
+</script>
 
 </html>

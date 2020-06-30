@@ -29,33 +29,7 @@ if ($result->num_rows === 0) {
         }
     }
 }
-function echoTask($taskID, $taskTitle, $taskText, $taskCreationDate, $taskLastEditDate, $taskPrivacy)
-{
-    $taskText = nl2br($taskText);
-    $temp = "<div class='card mt-2'>
-        <div class='card-header'>
-            <h5>{$taskTitle}</h5>
-        </div>
-        <div class='card-body'>
-            <p>{$taskText}</p>
-        </div>
-        <div class='card-footer'>
-            <div class='container-fluid'>
-                <div class='row'>
-                    <div class ='col-sm-6'>
-                        <a class='btn btn-secondary mr-1' href='editTask.php?id={$taskID}'>Edit task</a>
-                        <a class='btn btn-danger' href='deleteTask.php?id={$taskID}'>Delete task</a>
-                    </div>
-                    <div class ='col-sm-6 mt-1'>
-                        <p>Created: {$taskCreationDate}<p>
-                        <p>Last edited: {$taskLastEditDate}<p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>";
-    echo $temp;
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -65,6 +39,7 @@ function echoTask($taskID, $taskTitle, $taskText, $taskCreationDate, $taskLastEd
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Content</title>
+    <link rel="icon" href="icon.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -87,6 +62,7 @@ function echoTask($taskID, $taskTitle, $taskText, $taskCreationDate, $taskLastEd
                         <p>Tasks can be public and private.</p>
                         <p>If you own a task you can edit it.</p>
                         <p>If a task is public others can see it but they can't edit it.</p>
+                        <p>Private tasks are indicated by <span class="bg-secondary text-white p-1">grey background color</span>.</p>
                     </div>
                     <div class="card-footer">
                         <p><a href="newTask.php" class="btn btn-outline-dark">Click here to create a new task</a></p>
@@ -94,7 +70,7 @@ function echoTask($taskID, $taskTitle, $taskText, $taskCreationDate, $taskLastEd
                 </div>
             </div>
             <div class="col-xl-6">
-                <div class="card">
+                <div class="card mb-2">
                     <div class="card-header">
                         <h5>Task list</h5>
                     </div>
@@ -109,7 +85,7 @@ function echoTask($taskID, $taskTitle, $taskText, $taskCreationDate, $taskLastEd
                 </div>
                 <?php
                 for ($i = 0; $i < $numOfTasks; $i++) {
-                    echoTask($taskIDs[$i], $taskTitles[$i], $taskTexts[$i], $taskCreationDates[$i], $taskLastEditDates[$i], $taskPrivate[$i]);
+                    echoTask($taskIDs[$i], $taskTitles[$i], $taskTexts[$i], $taskCreationDates[$i], $taskLastEditDates[$i], $taskPrivate[$i], true);
                 }
                 ?>
             </div>
@@ -119,10 +95,11 @@ function echoTask($taskID, $taskTitle, $taskText, $taskCreationDate, $taskLastEd
                         <h4>Logged in as <?php echo $_SESSION["username"]; ?></h4>
                     </div>
                     <div class="card-body">
-                        <p>You currently have <?php echo $numOfTasks?> tasks, of which <?php echo $numOfPrivateTasks?> are private.</p>
+                        <p>You currently have <?php echo $numOfTasks?> task(s), of which <?php echo $numOfPrivateTasks?> is/are private.</p>
                     </div>
                     <div class="card-footer">
                         <a href="logout.php" class="btn btn-secondary">Log out</a>
+                        <a href="index.php" class="btn btn-info">Go back to index</a>
                     </div>
                 </div>
             </div>
