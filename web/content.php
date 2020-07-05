@@ -98,14 +98,14 @@ if ($result->num_rows === 0) {
                         <p>You currently have <?php echo $numOfTasks?> task(s), of which <?php echo $numOfPrivateTasks?> is/are private.</p>
                     </div>
                     <div class="card-footer">
-                        <a href="logout.php" class="btn btn-secondary">Log out</a>
-                        <a href="index.php" class="btn btn-info">Go back to index</a>
+                        <a href="logout.php" class="btn btn-secondary mt-1">Log out</a>
+                        <a href="index.php" class="btn btn-info mt-1">Go back to index</a>
                         <a class='btn btn-dark mt-1' href='https://github.com/ATufekovic/WEB_projekt' target='_blank'>Made by Anto Tufeković</a>
+                        <a href = "deleteUser.php" class="btn btn-outline-danger mt-1">Click here to delete your account</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </body>
-
 </html>

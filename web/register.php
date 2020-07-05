@@ -45,7 +45,7 @@ if (isset($_SESSION["username"])) {
                         </form>
                     </div>
                     <div class="card-footer">
-                        <p>Username has to be more than 8 and less than 20 characters long and may only contain letters, numbers and underscores.</p>
+                        <p>Username has to be more than 8 and less than 20 characters long and may only contain letters, numbers and underscores. Password has to be atleast 8 characters and less than 50.</p>
                         <p class="text-warning" id="warningText"></p>
                     </div>
                 </div>
@@ -58,26 +58,59 @@ if (isset($_SESSION["username"])) {
 <script>
     $(document).ready(function() {
         let nicknameInput = document.querySelector("#inputUsername");
+        let passwordInput = document.querySelector("#inputPassword");
         let warningText = document.querySelector("#warningText");
         let buttonSubmit = document.querySelector("#buttonSubmit");
+
+        let nicknameFlag = false;
+        let passwordFlag = false;
+
         buttonSubmit.disabled = true;
 
         nicknameInput.addEventListener("keyup", (e) => {
             var illegalChars = /\W/;
             if (nicknameInput.value == "") {
                 warningText.innerHTML = "Not a valid username";
+                nicknameFlag = false;
                 buttonSubmit.disabled = true;
             } else if ((nicknameInput.value.length < 8) || (nicknameInput.value.length >= 20)) {
                 warningText.innerHTML = "Breaking character limit";
+                nicknameFlag = false;
                 buttonSubmit.disabled = true;
             } else if (illegalChars.test(nicknameInput.value)) {
                 warningText.innerHTML = "Contains forbidden letters";
+                nicknameFlag = false;
                 buttonSubmit.disabled = true;
             } else {
                 warningText.innerHTML = "";
-                buttonSubmit.disabled = false;
+                nicknameFlag = true;
+                checkInputs(nicknameFlag, passwordFlag);
             }
         });
+
+        passwordInput.addEventListener("keyup", (e) => {
+            if(passwordInput.value == ""){
+                warningText.innerHTML = "Not a valid password";
+                passwordFlag = false;
+                buttonSubmit.disabled = true;
+            } else if((passwordInput.value.length < 8) || (passwordInput.value.length > 50)){
+                warningText.innerHTML = "Breaking character limit";
+                passwordFlag = false;
+                buttonSubmit.disabled = true;
+            } else {
+                warningText.innerHTML = "";
+                passwordFlag = true;
+                checkInputs(nicknameFlag, passwordFlag);
+            }
+        });
+
+        function checkInputs (nickBool, passBool){
+            if(nickBool && passBool){
+                buttonSubmit.disabled = false;
+            } else {
+                buttonSubmit.disabled = true;
+            }
+        }
     });
 </script>
 
